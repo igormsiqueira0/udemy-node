@@ -108,3 +108,83 @@ ler(FILE_PATH);
 ```
 
 OBS: Pode ser utilizado `.promises` após `require('fs')` para que as funções utilizem promessas
+
+#### Express Hello World (aula 6)
+
+O express ajuda a trabalhar as rotas da aplicação
+
+Operações básicas de uma API: CRUD
+Create Read Update Delete
+POST GET PUT DELETE
+
+Exemplo extremamente básico:
+
+```js
+// carregando o express
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
+	res.send('Hello world!');
+});
+
+// diz a porta ser "ouvida" pelo servidor
+app.listen(3000, () => {
+	console.log('Servidor executando na porta 3000');
+	console.log('Acesse http://localhost:3000');
+});
+```
+
+#### Parâmetros, query e body
+
+##### Parâmetros:
+
+Em uma URL, é possível definir que coisas após o `/` sejam consideradas parâmetros de uma rota.
+
+Ex: `https://meusite.com/profile/123`.
+Aqui, definiremos a parte depos de profile/ como sendo o id
+
+```js
+// : indica que a url receberá um parâmetro com aquele nome
+// ? indica que aquele parâmetro será opcional
+
+app.get('/profile/:id?', (req, res) => {
+	res.send(`Seu id é ${req.params.id}`); // req.params retorna um objeto com os parâmetros definidos
+});
+```
+
+Neste caso, ao usar `req.params`, será retornado um objeto:
+
+```
+{
+	id: "123"
+}
+```
+
+OBS: Também é possível adicionar outros parâmetros em um mesmo endereço, todos retornarão no objeto.
+
+##### Query:
+
+Em uma URL, coisas após o `?` indicam que ali estará o query e para queries adicionais é utilizado `&`, ex: `/loja?ordem=crescente&min=500&max=2000`
+neste caso, ao usar `req.query`, será retornado um objeto:
+
+```
+{
+	ordem: "crescente",
+	min="500",
+	max="2000"
+}
+```
+
+##### Body:
+
+`req.body` é utilizado para obter as informações de um POST.
+
+Por padrão, o express não faz um tratamento do req.body para retornar um objeto, por isso, é utilizado a seguinte linha de código para tal:
+
+```js
+app.use(express.urlencoded({ extended: true }));
+```
+
+Em um formulário, o `name` de um input é o que será utilizado para dar nome ao valor da chave do objeto retornado de `req.body`.
+
